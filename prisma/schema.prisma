@@ -1,0 +1,35 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Audit {
+  id            String   @id @default(cuid())
+  url           String
+  domain        String
+  globalScore   Int
+  status        String   @default("pending") // pending | running | done | error
+
+  // Scores par section
+  technicalScore    Int @default(0)
+  contentScore      Int @default(0)
+  performanceScore  Int @default(0)
+
+  // Résumé
+  totalIssues    Int @default(0)
+  criticalIssues Int @default(0)
+  warnings       Int @default(0)
+
+  // Rapport complet JSON
+  reportData    Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([domain])
+  @@index([createdAt])
+}
