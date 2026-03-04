@@ -1,5 +1,6 @@
 import {prisma} from "@/lib/prisma";
 import {NextRequest, NextResponse} from "next/server";
+import {runFullAudit} from "@/lib/runner";
 
 export async function GET() {
     try {
@@ -43,13 +44,13 @@ export async function POST(req: NextRequest) {
         })
 
         //Todo: remove comment after implement
-        /*runFullAudit(audit.id, normalizedUrl).catch(async (err: unknown) => {
+        runFullAudit(audit.id, normalizedUrl).catch(async (err: unknown) => {
             await prisma.audit.update({
                 where: {id: audit.id},
                 data: {status: 'error'}
             })
             console.log("Audit error: ", err instanceof Error ? err.message : 'Erreur server')
-        })*/
+        })
 
         return NextResponse.json(audit, {status: 201})
     } catch (error: unknown) {
